@@ -18,7 +18,6 @@ public class LoanController {
     @GetMapping
     public ResponseEntity<List<LoanResponseDto>> findAllLoans() {
         List<LoanResponseDto> allLoans = loanService.findAllLoans();
-        System.out.println("hiiii");
         return ResponseEntity.ok(allLoans);
     }
 
