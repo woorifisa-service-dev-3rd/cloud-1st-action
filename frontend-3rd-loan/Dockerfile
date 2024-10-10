@@ -1,19 +1,40 @@
-# 1단계: 환경설정 및 dependency 설치
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY package*.json ./
-RUN npm install
-COPY . .
+FROM node:18-alpine AS base
 
-# 2단계: 빌드 단계
+# Install dependencies only when needed
+FROM base AS deps
+RUN apk add --no-cache libc6-compat
+WORKDIR /usr/src/app
+
+# Install dependencies based on the preferred package manager
+COPY package.json package-lock.json ./
+RUN npm ci --only=production
+RUN rm -rf ./.next/cache
+
+# Rebuild the source code only when needed
+FROM base AS builder
+WORKDIR /usr/src/app
+COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY . ./
 RUN npm run build
-FROM node:18-alpine
-WORKDIR /app
-COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package*.json ./
-RUN npm install --production
+
+# Production image, copy all the files and run next
+FROM base AS runner
+WORKDIR /usr/src/app
+
+ENV NODE_ENV=production
+
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
+
+COPY --from=builder /usr/src/app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /usr/src/app/.next/static ./.next/static
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT=3000
 ENV NEXT_PUBLIC_SERVER_API_URL=http://action-be:8080
 
-# 3단계: 실행 단계
-CMD ["npm", "run", "start"]
+CMD ["node", "server.js"]
