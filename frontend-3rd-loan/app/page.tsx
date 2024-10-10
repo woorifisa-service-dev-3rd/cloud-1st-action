@@ -11,7 +11,7 @@ const Home = () => {
         height={400}
       />
       <h1 className="text-5xl text-blue-900 font-bold mt-10">
-        우리 FISA 캐피탈555
+        우리 FISA 캐피탈666
       </h1>
     </div>
   );
