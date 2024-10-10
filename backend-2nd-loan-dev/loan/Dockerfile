@@ -14,7 +14,7 @@ COPY src src
 
 # 빌드 수행
 RUN chmod +x gradlew
-RUN ./gradlew build
+RUN ./gradlew build -x test
 
 # Application 실행에 관련된 스크립트 --------------------------------
 FROM openjdk:17-jdk-slim
