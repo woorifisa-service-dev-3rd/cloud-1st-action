@@ -13,7 +13,7 @@ COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/package*.json ./
 RUN npm install --production
-ENV NEXT_PUBLIC_BASE_URL=http://action-be:8080
+ENV NEXT_PUBLIC_SERVER_API_URL=http://action-be:8080
 
 # 3단계: 실행 단계
 CMD ["npm", "run", "start"]
