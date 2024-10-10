@@ -22,7 +22,7 @@ jobs:
       # docker hub push
       - name: Push backend Docker image
         run: |
-          cd backend-2nd-loan-dev
+          cd backend-2nd-loan-dev/loan
           docker build -t cyd0010/cloud-loan:1.0 .
           docker push cyd0010/cloud-loan:1.0
 
