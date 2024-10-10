@@ -5,7 +5,7 @@ on:
     paths:
       - "frontend-3rd-loan/**"
     branches:
-      - "fe"
+      - "main"
       # TODO: 최종에서는 fe -> main으로 바꾸기
 
 jobs:
