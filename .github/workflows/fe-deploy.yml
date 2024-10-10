@@ -28,8 +28,15 @@ jobs:
         run: |
           cd frontend-3rd-loan
           docker pull seonmin5/action-fe:1.0
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_USER }}@${{ secrets.EC2_IP }} << 'EOF'
+
+      - name: SSH and deploy to EC2
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{ secrets.EC2_IP }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
+          script: |
             docker stop action-fe || true
             docker rm action-fe || true
             docker run -d -p 80:3000 --name action-fe seonmin5/action-fe:1.0
-          EOF
