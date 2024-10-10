@@ -17,7 +17,8 @@ const Login = () => {
 
     try {
       // POST 요청 보내기
-      const response = await fetch("http://localhost:8080/login", {
+      const url = process.env.NEXT_PUBLIC_SERVER_API_URL;
+      const response = await fetch(`${url}/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
