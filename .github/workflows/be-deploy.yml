@@ -38,10 +38,10 @@ jobs:
           # Remove old image
           # Pull new image and run
           script: |
-            sudo docker stop action-fe || true
-            sudo docker rm action-fe || true
+            sudo docker stop action-be || true
+            sudo docker rm action-be || true
 
             sudo docker rmi -f ${{ secrets.DOCKER_USERNAME_BE }}/cloud-loan:1.0 || true
 
             sudo docker pull ${{ secrets.DOCKER_USERNAME_BE}}/cloud-loan:1.0
-            sudo docker run -d -p 80:3000 --name action-be cyd0010/cloud-loan:1.0
+            sudo docker run -d -p 8080:8080 --name action-be cyd0010/cloud-loan:1.0
